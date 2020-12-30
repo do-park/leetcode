@@ -1,6 +1,3 @@
-from collections import deque
-
-
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -8,18 +5,16 @@ from collections import deque
 #         self.next = next
 class Solution:
     def isPalindrome(self, head: ListNode) -> bool:
-        q: Deque = deque()
+        rev = None
+        slow = fast = head
 
-        if not head:
-            return True
+        while fast and fast.next:
+            fast = fast.next.next
+            rev, rev.next, slow = slow, rev, slow.next
+        if fast:
+            slow = slow.next
 
-        node = head
-        while node is not None:
-            q.append(node.val)
-            node = node.next
+        while rev and rev.val == slow.val:
+            slow, rev = slow.next, rev.next
 
-        while len(q) > 1:
-            if q.popleft() != q.pop():
-                return False
-
-        return True
+        return not rev
